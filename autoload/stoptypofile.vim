@@ -26,7 +26,7 @@ function! stoptypofile#check_typo()
     endif
     let prompt = "possible typo: really want to write to '"
     \           . file . "'?(y/n):"
-    if s:ask(prompt) =~? '^y\(es\)\=$'
+    if s:input(prompt) =~? '^y\(es\)\=$'
         execute writecmd
         let b:stoptypofile_nocheck = 1
     endif
@@ -34,7 +34,7 @@ endfunction
 
 " * inputsave() / inputrestore()
 " * highlight support
-function! s:ask(...) abort
+function! s:input(...) abort
     call inputsave()
     echohl WarningMsg
     try
