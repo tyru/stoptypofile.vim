@@ -24,7 +24,8 @@ function! stoptypofile#check_typo()
         endif
         return
     endif
-    let prompt = "possible typo: really want to write to '" . file . "'?(y/n):"
+    let prompt = "possible typo: really want to write to '"
+    \           . file . "'?(y/YES/n):"
     let input = s:ask(prompt)
     if input ==# 'YES'
         execute writecmd
