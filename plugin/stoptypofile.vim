@@ -13,6 +13,7 @@ if !get(g:, 'stoptypofile_no_default_autocmd', 0)
     augroup stoptypofile
         autocmd!
         autocmd BufWriteCmd * call stoptypofile#check_typo()
+        autocmd BufFilePost * unlet! b:stoptypofile_nocheck
     augroup END
 endif
 

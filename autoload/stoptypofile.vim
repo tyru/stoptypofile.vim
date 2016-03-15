@@ -25,13 +25,10 @@ function! stoptypofile#check_typo()
         return
     endif
     let prompt = "possible typo: really want to write to '"
-    \           . file . "'?(y/YES/n):"
-    let input = s:ask(prompt)
-    if input ==# 'YES'
+    \           . file . "'?(y/n):"
+    if s:ask(prompt) =~? '^y\(es\)\=$'
         execute writecmd
         let b:stoptypofile_nocheck = 1
-    elseif input =~? '^y\(es\)\=$'
-        execute writecmd
     endif
 endfunction
 
