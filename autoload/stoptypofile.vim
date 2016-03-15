@@ -13,7 +13,7 @@ let g:stoptypofile#ignore_pattern =
 function! stoptypofile#check_typo()
     let file = expand('<afile>')
     let writecmd = 'write' . (v:cmdbang ? '!' : '') . ' ' . file
-    if exists('b:stoptypofile_nocheck')
+    if s:is_ignored_file(file)
         execute writecmd
         return
     endif
@@ -28,8 +28,19 @@ function! stoptypofile#check_typo()
     \           . file . "'?(y/n):"
     if s:input(prompt) =~? '^y\(es\)\=$'
         execute writecmd
-        let b:stoptypofile_nocheck = 1
+        call s:add_ignore_file(file)
     endif
+endfunction
+
+let s:ignored_files = {}
+function! s:is_ignored_file(file) abort
+    let file = resolve(fnamemodify(a:file, ':p'))
+    return has_key(s:ignored_files, file)
+endfunction
+
+function! s:add_ignore_file(file) abort
+    let file = resolve(fnamemodify(a:file, ':p'))
+    let s:ignored_files[file] = 1
 endfunction
 
 " * inputsave() / inputrestore()
