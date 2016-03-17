@@ -12,10 +12,7 @@ set cpo&vim
 if !get(g:, 'stoptypofile_no_default_autocmd', 0)
     augroup stoptypofile
         autocmd!
-        " For jp106 keyboard
-        autocmd BufWriteCmd *[,*] call stoptypofile#check_typo()
-        " For us101 keyboard
-        " autocmd BufWriteCmd *],*\ call stoptypofile#check_typo()
+        autocmd BufWriteCmd * call stoptypofile#check_typo()
     augroup END
 endif
 
