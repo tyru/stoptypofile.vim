@@ -36,6 +36,7 @@ function! stoptypofile#check_typo()
 endfunction
 
 function! s:do_write(writecmd) abort
+    doautocmd BufWritePre
     execute a:writecmd
     setlocal nomodified
 endfunction
