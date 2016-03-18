@@ -12,8 +12,8 @@ let g:stoptypofile#ignore_pattern =
 
 function! stoptypofile#check_typo()
     " Skip if a file is marked as temporarily ignored.
+    let writecmd = 'write' . (v:cmdbang ? '!' : '')
     let file = expand('<afile>')
-    let writecmd = 'write' . (v:cmdbang ? '!' : '') . ' ' . file
     if s:is_ignored_file(file)
         return s:do_write(writecmd)
     endif
