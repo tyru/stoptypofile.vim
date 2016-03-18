@@ -15,14 +15,13 @@ function! stoptypofile#check_typo()
     let file = expand('<afile>')
     let writecmd = 'write' . (v:cmdbang ? '!' : '') . ' ' . file
     if s:is_ignored_file(file)
-        execute writecmd
-        return
+        return s:do_write(writecmd)
     endif
     " Skip a normal file or ignored file.
     if file !~# g:stoptypofile#check_pattern
     \   || file =~# g:stoptypofile#ignore_pattern
         if file !~# g:stoptypofile#check_pattern
-            execute writecmd
+            call s:do_write(writecmd)
         endif
         return
     endif
@@ -31,9 +30,14 @@ function! stoptypofile#check_typo()
     let prompt = "possible typo: really want to write to '"
     \           . file . "'?(y/n):"
     if s:input(prompt) =~? '^y\(es\)\=$'
-        execute writecmd
+        call s:do_write(writecmd)
         call s:add_ignore_file(file)
     endif
+endfunction
+
+function! s:do_write(writecmd) abort
+    execute a:writecmd
+    setlocal nomodified
 endfunction
 
 let s:ignored_files = {}
