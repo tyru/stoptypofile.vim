@@ -7,8 +7,10 @@ set cpo&vim
 let g:stoptypofile#check_pattern =
 \   get(g:, 'stoptypofile#check_pattern', '[[\]\\]$')
 " Some plugins are using special buffer name.
+" * [qfreplace]
+" * fugitive://... (URI-like buffer name)
 let g:stoptypofile#ignore_pattern =
-\   get(g:, 'stoptypofile#ignore_pattern', '^\[qfreplace\]$')
+\   get(g:, 'stoptypofile#ignore_pattern', '\v(^\[qfreplace\]$|^\w+://)')
 
 function! stoptypofile#check_typo()
     " Skip if a file is marked as temporarily ignored.
@@ -20,7 +22,7 @@ function! stoptypofile#check_typo()
     " Skip a normal file or ignored file.
     if file !~# g:stoptypofile#check_pattern
     \   || file =~# g:stoptypofile#ignore_pattern
-        if file !~# g:stoptypofile#check_pattern
+        if file !~# g:stoptypofile#ignore_pattern
             call s:do_write(writecmd)
         endif
         return
