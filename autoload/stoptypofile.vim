@@ -2,10 +2,12 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
-" For jp106 keyboard: [, ]
-" For us101 keyboard: ], \
+runtime! plugin/stoptypofile.vim
+
 let g:stoptypofile#check_pattern =
-\   get(g:, 'stoptypofile#check_pattern', '[[\]\\]$')
+\   get(g:, 'stoptypofile#check_pattern',
+\       '[' . escape(g:stoptypofile_autocmd_chars, ']-^:\') . ']$'
+\   )
 " Some plugins are using special buffer name.
 " * [qfreplace]
 " * fugitive://... (URI-like buffer name)
