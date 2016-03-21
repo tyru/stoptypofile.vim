@@ -2,25 +2,30 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
-" For jp106 keyboard: [, ]
-" For us101 keyboard: ], \
+runtime! plugin/stoptypofile.vim
+
 let g:stoptypofile#check_pattern =
-\   get(g:, 'stoptypofile#check_pattern', '[[\]\\]$')
+\   get(g:, 'stoptypofile#check_pattern',
+\       '[' . escape(g:stoptypofile_autocmd_chars, ']-^:\') . ']$'
+\   )
 " Some plugins are using special buffer name.
+" * [qfreplace]
+" * fugitive://... (URI-like buffer name)
 let g:stoptypofile#ignore_pattern =
-\   get(g:, 'stoptypofile#ignore_pattern', '^\[qfreplace\]$')
+\   get(g:, 'stoptypofile#ignore_pattern', '\v(^\[qfreplace\]$|^\w+://)')
 
 function! stoptypofile#check_typo()
     " Skip if a file is marked as temporarily ignored.
-    let writecmd = 'write' . (v:cmdbang ? '!' : '')
     let file = expand('<afile>')
+    let writecmd = 'write' . (v:cmdbang ? '!' : '')
+    \               . ' `=' . string(file) . '`'
     if s:is_ignored_file(file)
         return s:do_write(writecmd)
     endif
     " Skip a normal file or ignored file.
     if file !~# g:stoptypofile#check_pattern
     \   || file =~# g:stoptypofile#ignore_pattern
-        if file !~# g:stoptypofile#check_pattern
+        if file !~# g:stoptypofile#ignore_pattern
             call s:do_write(writecmd)
         endif
         return
